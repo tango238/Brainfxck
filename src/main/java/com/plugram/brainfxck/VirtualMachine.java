@@ -192,7 +192,8 @@ public class VirtualMachine {
 	
 	private void gotoLoopEnd() {
 		try {
-			for (int nest = 0; ; this.pc++) {
+			int nest = 0;
+			while(true) {
 				char ch = source.charAt(this.pc);
 				if (ch == '[') {
 					nest++;
@@ -200,8 +201,8 @@ public class VirtualMachine {
 					nest--;
 					if(nest == 0) break;
 				}
+				this.pc++;
 			}
-			
 		} catch(ArrayIndexOutOfBoundsException e){
 			System.err.println("loopStart: Execution error.");
 		}
@@ -212,7 +213,8 @@ public class VirtualMachine {
 	 */
 	public void loopEnd() {
 		try {
-			for (int nest = 0;; this.pc--) {
+			int nest = 0;
+			while(true) {
 				char ch = source.charAt(this.pc);
 				if (ch == ']') {
 					nest++;
@@ -220,6 +222,7 @@ public class VirtualMachine {
 					nest--;
 					if (nest == 0) break;
 				}
+				this.pc--;
 			}
 			
 		} catch(ArrayIndexOutOfBoundsException e){
