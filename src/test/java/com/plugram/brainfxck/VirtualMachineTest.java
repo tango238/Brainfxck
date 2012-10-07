@@ -3,6 +3,7 @@ package com.plugram.brainfxck;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class VirtualMachineTest {
@@ -48,6 +49,14 @@ public class VirtualMachineTest {
 			vm.plus();
 		}
 		vm.print();
+	}
+	
+	@Ignore
+	@Test
+	public void testRead() throws Exception {
+		VirtualMachine vm = new VirtualMachine();
+		vm.read();
+		System.out.println(vm.getValue(vm.getAddress()));
 	}
 	
 	@Test
