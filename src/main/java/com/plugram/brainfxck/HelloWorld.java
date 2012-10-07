@@ -14,6 +14,6 @@ public class HelloWorld {
 	private void start() {
 		String source = ">+++++++++[<++++++++>-]<.>+++++++[<++++>-]<+.+++++++..+++.[-]>++++++++[<++++>-]<.>+++++++++++[<+++++>-]<.>++++++++[<+++>-]<.+++.------.--------.[-]>++++++++[<++++>-]<+.[-]++++++++++.";
 		VirtualMachine vm = new VirtualMachine(source);
-		vm.start();
+		vm.start(); // prints out 'Hello World!'
 	}
 }
