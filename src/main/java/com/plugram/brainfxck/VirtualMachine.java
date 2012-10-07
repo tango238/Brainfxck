@@ -1,5 +1,7 @@
 package com.plugram.brainfxck;
 
+import java.io.IOException;
+
 /**
  * The virtual machine of brainfack.<br>
  * This doesn't implements the opcode ','.
@@ -58,9 +60,9 @@ public class VirtualMachine {
 				case '.':
 					print();
 					break;
-//				case ',':
-//					read();
-//					break;
+				case ',':
+					read();
+					break;
 				case '[':
 					loopStart();
 					break;
@@ -173,7 +175,7 @@ public class VirtualMachine {
 
 	/**
 	 * The opcode of 「.」.<br>
-	 * This will prints out the value as character.
+	 * This will print out the value as character.
 	 */
 	public void print() {
 		System.out.print((char)data[address]);
@@ -181,10 +183,26 @@ public class VirtualMachine {
 	}
 	
 	/**
+	 * The opcode of 「,」.<br>
+	 * This will wait out the value as character.
+	 */
+	public void read() {
+		try {
+			System.out.print("input -> ");
+			int ch = System.in.read();
+			data[address] = (byte) ch;
+		} catch (IOException e) {
+			System.err.println("read: Execution error.");
+		} finally {
+			this.pc++;
+		}
+	}
+	
+	/**
 	 * The opcode of 「[」
 	 */
 	public void loopStart(){
-		if(data[address] == (byte)0){
+		if(data[address] == (byte) 0){
 			gotoLoopEnd();
 		}
 		this.pc++;
@@ -224,7 +242,6 @@ public class VirtualMachine {
 				}
 				this.pc--;
 			}
-			
 		} catch(ArrayIndexOutOfBoundsException e){
 			System.err.println("loopEnd: Execution error.");
 		}
