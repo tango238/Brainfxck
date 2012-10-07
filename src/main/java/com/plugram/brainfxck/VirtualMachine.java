@@ -23,7 +23,7 @@ public class VirtualMachine {
 	
 	/** the data */
 	private byte[] data = new byte[MAX_SIZE];
-
+	
 	public VirtualMachine() {
 	}
 	
@@ -31,13 +31,17 @@ public class VirtualMachine {
 		this.source = source;
 	}
 	
+	public void start() {
+		start(false);
+	}
 	/**
 	 * Executes the program.
 	 */
-	public synchronized void start() {
+	public synchronized void start(boolean debug) {
 		int length = source.length();
 		while(pc < length){
 			char c = source.charAt(pc);
+			if(debug) System.out.print(c);
 			switch(c){
 				case '>':
 					next();
@@ -54,6 +58,9 @@ public class VirtualMachine {
 				case '.':
 					print();
 					break;
+//				case ',':
+//					read();
+//					break;
 				case '[':
 					loopStart();
 					break;
@@ -102,6 +109,10 @@ public class VirtualMachine {
 	 */
 	public int currentPc() {
 		return pc;
+	}
+	
+	public void setPc(int pc){
+		this.pc = pc;
 	}
 	
 	/**
@@ -169,16 +180,27 @@ public class VirtualMachine {
 		this.pc++;
 	}
 	
+	/**
+	 * The opcode of 「[」
+	 */
 	public void loopStart(){
 		if(data[address] == (byte)0){
 			gotoLoopEnd();
 		}
 		this.pc++;
 	}
-
+	
 	private void gotoLoopEnd() {
 		try {
-			while(source.charAt(pc) != ']'){
+			int nest = 0;
+			while(true) {
+				char ch = source.charAt(this.pc);
+				if (ch == '[') {
+					nest++;
+				} else if (ch == ']') {
+					nest--;
+					if(nest == 0) break;
+				}
 				this.pc++;
 			}
 		} catch(ArrayIndexOutOfBoundsException e){
@@ -186,11 +208,23 @@ public class VirtualMachine {
 		}
 	}
 
+	/**
+	 * The opcode of 「]」
+	 */
 	public void loopEnd() {
 		try {
-			while(source.charAt(pc) != '['){
+			int nest = 0;
+			while(true) {
+				char ch = source.charAt(this.pc);
+				if (ch == ']') {
+					nest++;
+				} else if (ch == '[') {
+					nest--;
+					if (nest == 0) break;
+				}
 				this.pc--;
 			}
+			
 		} catch(ArrayIndexOutOfBoundsException e){
 			System.err.println("loopEnd: Execution error.");
 		}

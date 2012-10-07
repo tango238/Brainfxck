@@ -63,8 +63,26 @@ public class VirtualMachineTest {
 	}
 	
 	@Test
+	public void testLoopStartEndNested() throws Exception {
+		VirtualMachine vm = new VirtualMachine();
+		vm.setSource("[->[->>+<<]>>[-<+<+>>]<<<]");
+		vm.loopStart();
+		assertThat(vm.currentPc(), is(26));
+		vm.setPc(25);
+		assertThat(vm.getNextOpcode(), is(']'));
+		vm.loopEnd();
+		assertThat(vm.currentPc(), is(0));
+	}
+	
+	@Test
 	public void testStart() throws Exception {
 		VirtualMachine vm = new VirtualMachine("+++++++++[>++++++++<-]>.");
+		vm.start();
+	}
+	
+	@Test
+	public void testMultiply() throws Exception {
+		VirtualMachine vm = new VirtualMachine("++++>++><<[->[->>+<<]>>[-<+<+>>]<<<]>>++++++++++++++++++++++++++++++++++++++++++++++++.");
 		vm.start();
 	}
 }
