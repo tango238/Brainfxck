@@ -69,6 +69,9 @@ public class VirtualMachine {
 				case ']':
 					loopEnd();
 					break;
+				default:
+					pc++;
+					break;
 			}
 		}
 	}

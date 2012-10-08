@@ -84,6 +84,12 @@ public class VirtualMachineTest {
 	}
 	
 	@Test
+	public void testIgnoreSource() throws Exception {
+		VirtualMachine vm = new VirtualMachine("++++#+++++[>++++++++<-]>.");
+		vm.start();		
+	}
+	
+	@Test
 	public void testStart() throws Exception {
 		VirtualMachine vm = new VirtualMachine("+++++++++[>++++++++<-]>.");
 		vm.start();
